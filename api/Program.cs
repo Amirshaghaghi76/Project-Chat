@@ -1,6 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
-#region MongoDbSettings
+#region  MongoDbSettings
+
 ///// get values from this file: appsettings.Development.json /////
 // get section
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection(nameof(MongoDbSettings)));
@@ -17,47 +18,29 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
     return new MongoClient(uri.ConnectionString);
 });
 
-#endregion MongoDbSettingsGlobalUsin
+#endregion MongoDbSettings
+
+#region Cors: baraye ta'eede Angular HttpClient requests
+builder.Services.AddCors(options =>
+
+    {
+              options.AddDefaultPolicy(policy =>
+            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+    });
+#endregion Cors
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseCors();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
