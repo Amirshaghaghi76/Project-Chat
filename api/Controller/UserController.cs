@@ -4,39 +4,34 @@ namespace api.Controller;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    #region MongoDb
 
-    private const string _collectionName = "users";
-    private readonly IMongoCollection<AppUser>? _collection;
+    private readonly IUserRepository _userRepository;
 
-    public UserController(IMongoClient client, IMongoDbSettings dbSettings)
+    public UserController(IUserRepository userRepository)
     {
-        var database = client.GetDatabase(dbSettings.DatabaseName);
-        _collection = database.GetCollection<AppUser>(_collectionName);
+        _userRepository = userRepository;
     }
 
-    #endregion MongoDb 
-
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GettAll(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<UserDto>>> GettAll(CancellationToken cancellationToken)
     {
-        List<AppUser> appUsers = await _collection.Find<AppUser>(new BsonDocument()).ToListAsync(cancellationToken);
-        if (!appUsers.Any())
+        List<UserDto> userDtos = await _userRepository.GetAllAsync(cancellationToken);
+        if (!userDtos.Any())
 
             return NoContent();
 
-        return appUsers;
+        return userDtos;
     }
 
     [HttpGet("get-by-id/{userId}")]
-    public async Task<ActionResult<AppUser>> GetById(string userId, CancellationToken cancellationToken)
+    public async Task<ActionResult<UserDto>> GetById(string userId, CancellationToken cancellationToken)
     {
-        AppUser appUser = await _collection.Find<AppUser>(user => user.Id == userId).FirstOrDefaultAsync(cancellationToken);
+        UserDto? userDto = await _userRepository.GetByIdAsync(userId, cancellationToken);
 
-        if (appUser is null)
+        if (userDto is null)
 
             return NotFound("NO user was found");
 
-        return appUser;
+        return userDto;
     }
 }
