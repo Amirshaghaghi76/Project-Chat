@@ -8,3 +8,4 @@ global using MongoDB.Bson;
 global using MongoDB.Bson.Serialization.Attributes;
 global using api.Dtos;
 global using api.Interfaceses;
+global using api.Controller.Helpers;

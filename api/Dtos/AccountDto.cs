@@ -1,3 +1,4 @@
+
 namespace api.Dtos;
 
 public record RegisterDto
@@ -11,9 +12,17 @@ public record RegisterDto
 
 public record LoginDto
 (
+ [MaxLength(50), RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$", ErrorMessage ="Bad Email Format.")]
 string Email,
-string PassWord
+    [DataType(DataType.Password), Length(6, 10)] string PassWord
 );
+// {
+//     public static implicit operator LoginDto?(UserDto? v)
+//     {
+//         throw new NotImplementedException();
+//     }
+// }
+
 
 public record LoggedInDto
 (

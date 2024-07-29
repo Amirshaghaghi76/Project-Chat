@@ -1,10 +1,6 @@
 namespace api.Controller;
-
-[ApiController]
-[Route("api/[controller]")]
-public class UserController : ControllerBase
+public class UserController : BaseApiControllers
 {
-
     private readonly IUserRepository _userRepository;
 
     public UserController(IUserRepository userRepository)
@@ -16,7 +12,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult<IEnumerable<UserDto>>> GettAll(CancellationToken cancellationToken)
     {
         List<UserDto> userDtos = await _userRepository.GetAllAsync(cancellationToken);
-        if (!userDtos.Any())
+        if (userDtos.Count == 0)
 
             return NoContent();
 

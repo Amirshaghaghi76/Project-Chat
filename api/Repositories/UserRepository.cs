@@ -28,11 +28,13 @@ public class UserRepository : IUserRepository
                 );
                 userDtos.Add(userDto);
             }
+
             return userDtos;
         }
-
+        
         return userDtos;
     }
+
 
     public async Task<UserDto?> GetByIdAsync(string userId, CancellationToken cancellationToken)
     {

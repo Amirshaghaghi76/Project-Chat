@@ -1,0 +1,10 @@
+<div>
+    <button mat-fab (click)="showAllUsers()" color="primary"> show user</button>
+    @for (user of allUsers; track $index) {
+    <h1>
+        {{user.id}} <br>
+        {{user.email}}
+    </h1>
+    }
+
+</div>
