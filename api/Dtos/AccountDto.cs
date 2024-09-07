@@ -27,5 +27,6 @@ string Email,
 public record LoggedInDto
 (
     string Id,
-    string Email
+    string Email,
+    string Token
 );

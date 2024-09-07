@@ -1,1 +1,62 @@
-<p>register works!</p>
+<div class="content">
+
+    <form [formGroup]="registerFg" (ngSubmit)="registerFg.valid && register()">
+        
+        <mat-form-field appearance="outline" color="accent">
+            <mat-label> Name</mat-label>
+            <input type="text" formControlName="nameCtrl" matInput placeholder="Your Name">
+            <mat-hint>Pelese Enter Your Name </mat-hint>
+            @if (NameCtrl.hasError('required')) {
+            <mat-error> This field is required. </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" color="warn">
+            <mat-label>Email</mat-label>
+            <input type="email" formControlName="emailCtrl" matInput placeholder="your Email">
+            <mat-hint>Pelese Enter Your Email</mat-hint>
+            @if (EmailCtrl.hasError("required")) {
+            <mat-error> this feild is required</mat-error>
+            }
+            @else if (EmailCtrl.hasError("pattern")) {
+            <mat-error>Enter a valid email</mat-error>
+            }
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" color="primary">
+            <mat-label>Password</mat-label>
+            <input type="password" formControlName="passwordCtrl" matInput placeholder="your Password">
+            <mat-hint>Pelese Enter Your Password</mat-hint>
+            @if (PasswordCtrl.hasError("required")) {
+            <mat-error> this feild is required</mat-error>
+            }
+            @else if (PasswordCtrl.hasError('minlength')) {
+            <mat-error>It's too short. Min: 6 characters.</mat-error>
+            }
+            @else if (PasswordCtrl.hasError('maxlength')) {
+            <mat-error> It's too short. Max: 15 characters</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" color="primary">
+            <mat-label>Confrim Password</mat-label>
+            <input type="password" formControlName="confrimPasswordCtrl" matInput placeholder="your Confrim Password">
+            <mat-hint>Pelese Enter Your Password</mat-hint>
+            @if (ConfrimPasswordCtrl.hasError("required")) {
+            <mat-error> this feild is required</mat-error>
+            }
+            @else if (ConfrimPasswordCtrl.hasError('minlength')) {
+            <mat-error>It's too short. Min: 6 characters.</mat-error>
+            }
+            @else if (ConfrimPasswordCtrl.hasError('maxlength')) {
+            <mat-error> It's too short. Max: 15 characters</mat-error>
+            }
+        </mat-form-field>
+
+        <button type="submit" [disabled]="registerFg.invalid" mat-raised-button color="accent">submit</button>
+
+    </form>
+</div>
+
+<!-- <button (click)="register()" mat-raised-button color="primary"> register user</button> -->

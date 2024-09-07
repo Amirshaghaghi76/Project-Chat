@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace api.Repositories;
 
@@ -8,11 +7,13 @@ public class AccountRepository : IAccountRepository
 {
     private const string _collectionName = "users";
     private readonly IMongoCollection<AppUser>? _collection;
+    private readonly ITokenService _tokenService;
 
-    public AccountRepository(IMongoClient client, IMongoDbSettings dbSettings)
+    public AccountRepository(IMongoClient client, IMongoDbSettings dbSettings, ITokenService tokenService)
     {
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collection = database.GetCollection<AppUser>(_collectionName);
+        _tokenService=tokenService;
     }
 
     public async Task<LoggedInDto?> CreateAsync(RegisterDto userInput, CancellationToken cancellationToken)
@@ -22,7 +23,7 @@ public class AccountRepository : IAccountRepository
          .ToLower().Trim()).AnyAsync(cancellationToken);
         if (doseExist)
             return null;
-        // befor add password saltand hash
+        // befor add password salt and hash
         // AppUser appUser = new(
         //     Id: null,
         //     Name: userInput.Name,
@@ -49,6 +50,7 @@ public class AccountRepository : IAccountRepository
         {
             LoggedInDto loggedInDto = new(
                 Id: appUser.Id,
+                Token:_tokenService.CreateToken(appUser),
                 Email: appUser.Email
             );
 
@@ -64,8 +66,9 @@ public class AccountRepository : IAccountRepository
         AppUser appUser = await _collection.Find<AppUser>(user => user.Email == userInput.Email.ToLower().Trim())
         .FirstOrDefaultAsync(cancellationToken);
 
-        if (appUser is null)
+        if (appUser is null) // if email is not found
             return null;
+
         // Import and use HMACSHA256 including PasswordSalt
         using var hmac = new HMACSHA256(appUser.PasswordSalt);
 
@@ -79,6 +82,7 @@ public class AccountRepository : IAccountRepository
             {
                 return new LoggedInDto(
                     Id: appUser.Id,
+                    Token:_tokenService.CreateToken(appUser),
                     Email: appUser.Email
                 );
             }

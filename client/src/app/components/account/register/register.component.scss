@@ -1,0 +1,19 @@
+.content {
+    display: flex;
+    justify-content: center;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        border: solid 1rem;
+        width: 20rem;
+        align-items: center;
+        gap: 0.5rem;
+
+
+        mat-form-field {
+            width: 15rem;
+            padding-top: 0.5rem;
+        }
+    }
+}

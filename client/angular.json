@@ -106,6 +106,13 @@
     }
   },
   "cli": {
-    "analytics": "d4f2a550-9138-4911-b105-667057952a02"
+    "analytics": "54981d99-5d15-4942-a75e-876f1f79fdb6"
   }
+  ,    "budgets": [
+    {
+       "type": "initial",
+       "maximumWarning": "2mb",
+       "maximumError": "5mb"
+    }
+ ]
 }

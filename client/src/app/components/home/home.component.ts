@@ -2,11 +2,13 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    MatButtonModule
+  MatButtonModule,
+    RouterModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -23,4 +25,4 @@ export class HomeComponent {
       error: err => console.log(err)
     })
   }
-} 
+}
