@@ -1,1 +1,11 @@
-<p>navbar works!</p>
+<div>
+
+    @if (user) {
+
+    <p>{{user.email[0]|lowercase}}</p>
+    }
+    @else {
+    <button routerLink="account/register" mat-raised-button color="warn"> register</button>
+    <button routerLink="account/login" mat-raised-button color="accent"> login</button>
+    }
+</div>
