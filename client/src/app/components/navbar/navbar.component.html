@@ -2,10 +2,13 @@
 
     @if (user) {
 
-    <p>{{user.email[0]|lowercase}}</p>
+    <p>{{user.email}}</p>
+    <button (click)="logout()" mat-raised-button color="accent"> logout</button>
     }
     @else {
-    <button routerLink="account/register" mat-raised-button color="warn"> register</button>
-    <button routerLink="account/login" mat-raised-button color="accent"> login</button>
+    <div class="user">
+        <button routerLink="account/register" mat-raised-button color="warn"> register</button>
+        <button routerLink="account/login" mat-raised-button color="accent"> login</button>
+    </div>
     }
 </div>

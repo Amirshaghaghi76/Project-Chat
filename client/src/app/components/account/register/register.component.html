@@ -1,7 +1,7 @@
 <div class="content">
 
     <form [formGroup]="registerFg" (ngSubmit)="registerFg.valid && register()">
-        
+
         <mat-form-field appearance="outline" color="accent">
             <mat-label> Name</mat-label>
             <input type="text" formControlName="nameCtrl" matInput placeholder="Your Name">
@@ -56,6 +56,15 @@
 
         <button type="submit" [disabled]="registerFg.invalid" mat-raised-button color="accent">submit</button>
 
+        <div>
+            @if (passwordDontMatch) {
+            <p> passwordDontMatch </p>
+            }
+
+            @if (apiErrorMassage) {
+            <p> {{apiErrorMassage}}</p>
+            }
+        </div>
     </form>
 </div>
 

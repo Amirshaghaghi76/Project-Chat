@@ -25,7 +25,9 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
   private accountService = inject(AccountService)
   private fb = inject(FormBuilder)
-  private router= inject(Router)
+  private router = inject(Router)
+  passwordDontMatch: boolean | undefined;
+  apiErrorMassage: string | undefined;
 
   registerFg = this.fb.group({
     nameCtrl: ['', [Validators.required,]],
@@ -58,22 +60,29 @@ export class RegisterComponent {
     //   password: 'ali4256',
     //   confrimPassword: 'ali4256'
     // }
-    let user: RegisterUser = {
-      name: this.NameCtrl.value,
-      email: this.EmailCtrl.value,
-      password:this.PasswordCtrl.value,
-      confrimPassword:this.ConfrimPasswordCtrl.value
+    this.passwordDontMatch = undefined;
+    if (this.PasswordCtrl.value === this.ConfrimPasswordCtrl.value) {
+      this.passwordDontMatch = false;
+
+      let user: RegisterUser = {
+        name: this.NameCtrl.value,
+        email: this.EmailCtrl.value,
+        password: this.PasswordCtrl.value,
+        confrimPassword: this.ConfrimPasswordCtrl.value
+      }
+
+      this.accountService.registerUser(user).subscribe({
+        next: user => {
+
+          console.log(user);
+          this.router.navigateByUrl('/');
+        },
+        error: err => this.apiErrorMassage = err.error
+      })
     }
 
-    this.accountService.registerUser(user).subscribe({
-      next: user => {
-
-        console.log(user);
-        this.router.navigateByUrl('/');
-      },
-      
-    })
+    else {
+      this.passwordDontMatch = true
+    }
   }
-
-
 }

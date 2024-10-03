@@ -21,11 +21,20 @@ import { AccountService } from '../../services/account.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   user: User | null | undefined
+  
   constructor(private accountService: AccountService) {
+
+  }
+  ngOnInit(): void {
     this.accountService.currntUser$.subscribe({
       next: response => this.user = response
     })
+  }
+
+  logout() {
+    // console.log('logout is user')
+    this.accountService.logoutUser();
   }
 }
