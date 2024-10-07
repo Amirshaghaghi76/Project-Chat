@@ -51,7 +51,8 @@ public class AccountRepository : IAccountRepository
             LoggedInDto loggedInDto = new(
                 Id: appUser.Id,
                 Token:_tokenService.CreateToken(appUser),
-                Email: appUser.Email
+                Email: appUser.Email,
+                Name:appUser.Name
             );
 
             return loggedInDto;
@@ -81,9 +82,11 @@ public class AccountRepository : IAccountRepository
             if (appUser.Id is not null)
             {
                 return new LoggedInDto(
+                    Name:appUser.Name,
                     Id: appUser.Id,
                     Token:_tokenService.CreateToken(appUser),
                     Email: appUser.Email
+                    
                 );
             }
         }

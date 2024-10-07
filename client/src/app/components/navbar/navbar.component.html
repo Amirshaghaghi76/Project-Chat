@@ -1,14 +1,62 @@
-<div>
+<mat-toolbar class="content">
+    <section class="left">
+        <mat-icon routerLink="home" class="icon"> home</mat-icon>
+        <p routerLink="home"> home</p>
+    </section>
 
-    @if (user) {
+    <section class="right">
+        @if (user) {
 
-    <p>{{user.email}}</p>
-    <button (click)="logout()" mat-raised-button color="accent"> logout</button>
-    }
-    @else {
-    <div class="user">
-        <button routerLink="account/register" mat-raised-button color="warn"> register</button>
-        <button routerLink="account/login" mat-raised-button color="accent"> login</button>
-    </div>
-    }
-</div>
+        <!-- <p>{{user.email}}</p> -->
+        <button [mat-menu-trigger-for]="appMenu" mat-mini-fab>
+            <span> {{user.email[0]|lowercase}}</span>
+        </button>
+        }
+        @else {
+
+        <button routerLink="account/register" mat-fab extended> register</button>
+        <button routerLink="account/login" mat-fab extended> login</button>
+        }
+
+        <mat-menu #appMenu [class]="'mat-menu'">
+            <div class="user-info">
+                <div class="profile-image">
+                    @if (user) {
+                    <p>
+                        {{user.email[0]|titlecase}}
+                    </p>
+                    }
+                </div>
+                <div>
+                    <p class="name"> Hi, {{user?.name|titlecase}}</p>
+                    <p class="email">{{user?.email}}</p>
+                </div>
+            </div>
+            <mat-divider> </mat-divider>
+            <mat-list>
+                <mat-list-item>
+                    <div routerLink="member/edit" class="menu-items">
+                        <mat-icon> edit_note</mat-icon>
+                        <span> Edit Profile</span>
+                    </div>
+                </mat-list-item>
+                <mat-list-item>
+                    <div routerLink="member/edit" class="menu-items">
+                        <mat-icon> flaky</mat-icon>
+                        <span> All Members</span>
+                    </div>
+                </mat-list-item>
+                <mat-list-item>
+                    <div routerLink="member/edit" class="menu-items">
+                        <mat-icon> message</mat-icon>
+                        <span> Message</span>
+                    </div>
+                </mat-list-item>
+            </mat-list>
+            <mat-divider></mat-divider>
+            <div class="logout">
+                <button (click)="logout()" mat-raised-button> Logout </button>
+            </div>
+        </mat-menu>
+    </section>
+</mat-toolbar>

@@ -28,5 +28,6 @@ public record LoggedInDto
 (
     string Id,
     string Email,
-    string Token
+    string Token,
+    string Name
 );

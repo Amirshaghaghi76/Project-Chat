@@ -7,24 +7,25 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AccountService } from '../../services/account.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
-    MatToolbarModule, MatMenuModule,
+    MatToolbarModule, MatMenuModule,MatListModule,
     MatButtonModule, CommonModule, RouterModule,
-    MatDividerModule, MatListModule, MatIconModule,
+    MatDividerModule, MatListModule, MatIconModule, 
+    MatToolbarModule, MatIconModule,MatDividerModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
   user: User | null | undefined
-  
-  constructor(private accountService: AccountService) {
+
+  constructor(private accountService: AccountService, private router: Router) {
 
   }
   ngOnInit(): void {
@@ -36,5 +37,6 @@ export class NavbarComponent implements OnInit {
   logout() {
     // console.log('logout is user')
     this.accountService.logoutUser();
+    this.router.navigateByUrl('account/login')
   }
 }
