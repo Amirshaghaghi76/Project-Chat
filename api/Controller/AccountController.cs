@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controller;
 
-public class AccountController :BaseApiControllers
+public class AccountController : BaseApiControllers
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -16,7 +17,7 @@ public class AccountController :BaseApiControllers
         if (UserInput.PassWord != UserInput.ConFrimPassWord)
             BadRequest("Password Dont Match");
 
-        LoggedInDto? loggedInDto = await _accountRepository.CreateAsync(UserInput, cancellationToken);          
+        LoggedInDto? loggedInDto = await _accountRepository.CreateAsync(UserInput, cancellationToken);
 
         if (loggedInDto is null)
         {

@@ -1,9 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { json } from 'stream/consumers';
 import { User } from './models/user.model';
 import { AccountService } from './services/account.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import { AccountService } from './services/account.service';
 })
 export class AppComponent implements OnInit {
   title = 'client';
+  platformId = inject(PLATFORM_ID);
   // constructor() {
   //   // this.getLocalStorageCurrentValues();
   // }
@@ -21,11 +23,16 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     try { this.getLocallStorageCurrentValue(); }
-    catch (error) {}
+    catch (error) { }
   }
 
   getLocallStorageCurrentValue(): void {
-    const userString: string | null = localStorage.getItem('user');
+    let userString: string | null = null;
+
+    if (isPlatformBrowser(this.platformId)) {
+      console.log(this.platformId)
+      userString = localStorage.getItem('user');
+    }
 
     if (userString) {
       const user: User = JSON.parse(userString)

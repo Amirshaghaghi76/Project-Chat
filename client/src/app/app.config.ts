@@ -13,7 +13,9 @@ export const appConfig: ApplicationConfig = {
       provideRouter(routes),
       provideClientHydration(),
       provideAnimationsAsync(),
-      provideHttpClient(withFetch(), withInterceptors([jwtInterceptor])), 
+      provideHttpClient(withInterceptors([jwtInterceptor])), 
+      //provideHttpClient(withFetch(),withInterceptors([jwtInterceptor])), 
+
       provideAnimations(),
       provideAnimationsAsync()
     

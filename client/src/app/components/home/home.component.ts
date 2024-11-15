@@ -3,18 +3,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-  MatButtonModule,
-    RouterModule
+    MatButtonModule,
+    RouterModule,
+    CommonModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  allUsers: User[] | undefined;
+  allUsers: User[] |null| undefined;
 
   // constructor(private userService: UserService) { } angular 16
   userService = inject(UserService)

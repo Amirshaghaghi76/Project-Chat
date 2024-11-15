@@ -4,21 +4,23 @@ import { RegisterUser } from '../models/registerUser.model';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { User } from '../models/user.model';
 import { LoginUser } from '../models/loginUser';
+import { environment } from '../../environments/environment.development';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
+  private readonly baseApiUrl: string = environment.apiUrl +'account/'
   private setCurrentUserSourse = new BehaviorSubject<User | null>(null);
-  currntUser$ = this.setCurrentUserSourse.asObservable();
+  currentUser$ = this.setCurrentUserSourse.asObservable();
 
   constructor(private http: HttpClient) { }
 
   registerUser(userInput: RegisterUser): Observable<User | null> {
     // type NewType = User;
 
-    return this.http.post<User>('http://localhost:5000/api/account/register', userInput).pipe(
+    return this.http.post<User>(this.baseApiUrl + 'register', userInput).pipe(
       map(userResponse => {
         if (userResponse) {
           this.setCurrentUser(userResponse) // The code is cleaner (after delete line 24)
@@ -32,7 +34,7 @@ export class AccountService {
   }
 
   loginUser(userInput: LoginUser): Observable<User | null> {
-    return this.http.post<User>('http://localhost:5000/api/account/login', userInput).pipe(
+    return this.http.post<User>(this.baseApiUrl + 'login', userInput).pipe(
       map(userResponse => {
         if (userResponse) {
           // this.setCurrentUserSourse.next(userResponse) before add line 36

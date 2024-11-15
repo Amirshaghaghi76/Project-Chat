@@ -1,31 +1,33 @@
-<form [formGroup]="loginFg" (ngSubmit)="loginFg.valid && login()">
-    <mat-form-field appearance="outline" color="accent">
-        <mat-label> email</mat-label>
-        <input type="email" formControlName="emailCtrl" matInput placeholder="Your Email">
-        <mat-hint> Pelese Enter Your Email</mat-hint>
-        @if (EmailCtrl.hasError("required")) {
-        <mat-error> this feild is required</mat-error>
-        }
-        @else if (EmailCtrl.hasError("pattern")) {
-        <mat-error>Enter a valid email </mat-error>
-        }
-    </mat-form-field>
+<div class="content">
+    <form [formGroup]="loginFg" (ngSubmit)="loginFg.valid && login()">
+        <mat-form-field appearance="outline" color="accent">
+            <mat-label> email</mat-label>
+            <input type="email" formControlName="emailCtrl" matInput placeholder="Your Email">
+            <mat-hint> Pelese Enter Your Email</mat-hint>
+            @if (EmailCtrl.hasError("required")) {
+            <mat-error> this feild is required</mat-error>
+            }
+            @else if (EmailCtrl.hasError("pattern")) {
+            <mat-error>Enter a valid email </mat-error>
+            }
+        </mat-form-field>
 
-    <mat-form-field appearance="outline" color="warn">
-        <mat-label>Password</mat-label>
-        <input type="password" formControlName="passwordCtrl" matInput placeholder="your Password">
-        <mat-hint> Pelese Enter Your Password</mat-hint>
-        @if (PasswordCtrl.hasError("required")) {
-        <mat-error>this feild is required</mat-error>
-        }
-        @else if (PasswordCtrl.hasError("minlength")) {
-        <mat-error>It's too short. Min: 6 characters.</mat-error>
-        }
-        @else if (EmailCtrl.hasError("maxlength")) {
-        <mat-error> It's too short. Max: 15 characters</mat-error>
-        }
-    </mat-form-field>
-    <button type="submit" [disabled]="loginFg.invalid" mat-raised-button color="primary">
-        submit
-    </button>
-</form>
+        <mat-form-field appearance="outline" color="warn">
+            <mat-label>Password</mat-label>
+            <input type="password" formControlName="passwordCtrl" matInput placeholder="your Password">
+            <mat-hint> Pelese Enter Your Password</mat-hint>
+            @if (PasswordCtrl.hasError("required")) {
+            <mat-error>this feild is required</mat-error>
+            }
+            @else if (PasswordCtrl.hasError("minlength")) {
+            <mat-error>It's too short. Min: 6 characters.</mat-error>
+            }
+            @else if (EmailCtrl.hasError("maxlength")) {
+            <mat-error> It's too short. Max: 15 characters</mat-error>
+            }
+        </mat-form-field>
+        <button type="submit" [disabled]="loginFg.invalid" mat-raised-button color="primary">
+            submit
+        </button>
+    </form>
+</div>

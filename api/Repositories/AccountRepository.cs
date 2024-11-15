@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace api.Repositories;
 
@@ -36,10 +37,22 @@ public class AccountRepository : IAccountRepository
 
         AppUser appUser = new(
             Id: null,
-            Name: userInput.Name,
+            // Name: userInput.Name, before add knownAs
             PasswordHash: hmac.ComputeHash(Encoding.UTF8.GetBytes(userInput.PassWord)),
             PasswordSalt: hmac.Key,
-            Email: userInput.Email
+            Email: userInput.Email.ToLower().Trim(),
+            KnownAs: userInput.KnownAs.Trim(),
+            Created:DateTime.UtcNow,
+            LastActive:DateTime.UtcNow,
+            DateOfBirth:userInput.DateOfBirth,
+            Gender:userInput.Gender,
+            Introduction:userInput.Introduction?.Trim(),
+            LookingFor:userInput.LookingFor?.Trim(),
+            Interests:userInput.Interests?.Trim(),
+            City:userInput.City,
+            Country:userInput.Country,
+            Photos:[]
+
         );
 
         if (_collection is not null)
@@ -52,7 +65,8 @@ public class AccountRepository : IAccountRepository
                 Id: appUser.Id,
                 Token:_tokenService.CreateToken(appUser),
                 Email: appUser.Email,
-                Name:appUser.Name
+                // Name:appUser.Name
+                KnownAs:appUser.KnownAs
             );
 
             return loggedInDto;
@@ -82,11 +96,11 @@ public class AccountRepository : IAccountRepository
             if (appUser.Id is not null)
             {
                 return new LoggedInDto(
-                    Name:appUser.Name,
+                    // Name:appUser.Name,
                     Id: appUser.Id,
                     Token:_tokenService.CreateToken(appUser),
-                    Email: appUser.Email
-                    
+                    Email: appUser.Email,
+                    KnownAs:appUser.KnownAs  
                 );
             }
         }

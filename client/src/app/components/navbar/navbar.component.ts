@@ -10,28 +10,30 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AccountService } from '../../services/account.service';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
-    MatToolbarModule, MatMenuModule,MatListModule,
+    MatToolbarModule, MatMenuModule, MatListModule,
     MatButtonModule, CommonModule, RouterModule,
-    MatDividerModule, MatListModule, MatIconModule, 
-    MatToolbarModule, MatIconModule,MatDividerModule
+    MatDividerModule, MatListModule, MatIconModule,
+    MatToolbarModule, MatIconModule, MatDividerModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
   user: User | null | undefined
-
+  // user: Observable<User | null> | undefined
   constructor(private accountService: AccountService, private router: Router) {
 
   }
   ngOnInit(): void {
-    this.accountService.currntUser$.subscribe({
+    this.accountService.currentUser$.subscribe({
       next: response => this.user = response
     })
+    // this.user$ = this.accountService.currentUser$;
   }
 
   logout() {

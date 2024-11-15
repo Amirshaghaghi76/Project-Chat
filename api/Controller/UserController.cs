@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace api.Controller;
+[Authorize]
 public class UserController : BaseApiControllers
 {
     private readonly IUserRepository _userRepository;
@@ -7,7 +10,7 @@ public class UserController : BaseApiControllers
     {
         _userRepository = userRepository;
     }
-
+    // [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GettAll(CancellationToken cancellationToken)
     {
@@ -18,7 +21,7 @@ public class UserController : BaseApiControllers
 
         return userDtos;
     }
-
+    // [Authorize]
     [HttpGet("get-by-id/{userId}")]
     public async Task<ActionResult<UserDto>> GetById(string userId, CancellationToken cancellationToken)
     {
