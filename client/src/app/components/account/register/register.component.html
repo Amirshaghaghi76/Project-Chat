@@ -6,7 +6,7 @@
             <mat-label> Name</mat-label>
             <input type="text" formControlName="nameCtrl" matInput placeholder="Your Name">
             <mat-hint>Pelese Enter Your Name </mat-hint>
-            @if (NameCtrl.hasError('required')) {
+            @if (KnownAsCtrl.hasError('required')) {
             <mat-error> This field is required. </mat-error>
             }
         </mat-form-field>

@@ -1,5 +1,5 @@
 export interface RegisterUser {
-    name:string,
+    knownAS:string,
     email: string,
     password: string,
     confrimPassword: string

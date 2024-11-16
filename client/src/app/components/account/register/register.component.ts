@@ -38,7 +38,7 @@ export class RegisterComponent {
   })
 
 
-  get NameCtrl(): FormControl {
+  get KnownAsCtrl(): FormControl {
     return this.registerFg.get('nameCtrl') as FormControl
   }
   get EmailCtrl(): FormControl {
@@ -65,7 +65,7 @@ export class RegisterComponent {
       this.passwordDontMatch = false;
 
       let user: RegisterUser = {
-        name: this.NameCtrl.value,
+        knownAS: this.KnownAsCtrl.value,
         email: this.EmailCtrl.value,
         password: this.PasswordCtrl.value,
         confrimPassword: this.ConfrimPasswordCtrl.value

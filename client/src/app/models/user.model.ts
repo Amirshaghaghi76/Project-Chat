@@ -1,5 +1,5 @@
 export interface User{
-    name:string
+    knownAS:string
     id:string,
     email:string
     token:string

@@ -15,16 +15,16 @@ export class UserService {
   accountService = inject(AccountService);
 
   getAllUsers(): Observable<User[] | null> {
-    // let requestOptions;
-    // this.accountService.currentUser$.pipe(take(1)).subscribe({
-    //   next: (currentUser: User | null) => {
-    //     if (currentUser) {
-    //       requestOptions = {
-    //         headers: new HttpHeaders({ 'Authorization': `Bearer ${currentUser.token}` })
-    //       }
-    //     }
-    //   }
-    // });
+    let requestOptions;
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: (currentUser: User | null) => {
+        if (currentUser) {
+          requestOptions = {
+            headers: new HttpHeaders({ 'Authorization': `Bearer ${currentUser.token}` })
+          }
+        }
+      }
+    });
 
     return this.http.get<User[]>(this.baseApiUrl).pipe
       (

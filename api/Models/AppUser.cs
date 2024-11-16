@@ -9,15 +9,13 @@ public record AppUser
     byte[] PasswordHash,
     [MaxLength(50), RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$", ErrorMessage ="Bad Email Format.")]
      string Email,
-     string KnownAs,
+     string KnownAs
      DateTime Created, //time create account
      DateTime LastActive, //Last login time
      DateOnly DateOfBirth,
      string Gender,
      string? Introduction,
      string? LookingFor,
-
-     
      string? Interests,
      string City,
      string Country,
