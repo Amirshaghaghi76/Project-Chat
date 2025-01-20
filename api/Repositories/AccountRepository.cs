@@ -22,8 +22,10 @@ public class AccountRepository : IAccountRepository
 
         bool doseExist = await _collection.Find<AppUser>(user => user.Email == userInput.Email
          .ToLower().Trim()).AnyAsync(cancellationToken);
+
         if (doseExist)
             return null;
+
         // befor add password salt and hash
         // AppUser appUser = new(
         //     Id: null,
@@ -33,29 +35,8 @@ public class AccountRepository : IAccountRepository
         //     Email: userInput.Email
         // );
 
-        using var hmac = new HMACSHA256();
-        // if (userInput.Introduction is not null) Fixing the warning for trimming because it is null
-        // {
-            AppUser appUser = new(
-                Id: null,
-                // Name: userInput.Name, before add knownAs
-                PasswordHash: hmac.ComputeHash(Encoding.UTF8.GetBytes(userInput.PassWord)),
-                PasswordSalt: hmac.Key,
-                Email: userInput.Email.ToLower().Trim(),
-                KnownAs: userInput.KnownAs.Trim(),
-                Created: DateTime.UtcNow,
-                LastActive: DateTime.UtcNow,
-                DateOfBirth: userInput.DateOfBirth,
-                Gender: userInput.Gender,
-                Introduction: userInput.Introduction?.Trim(),
-                LookingFor: userInput.LookingFor?.Trim(),
-                Interests: userInput.Interests?.Trim(),
-                City: userInput.City,
-                Country: userInput.Country,
-                Photos: []
-
-            );
-        // }
+        // line 38 after add _Mappers
+        AppUser appUser = _Mappers.ConvertRegisterDtoToAppUser(userInput);
 
         if (_collection is not null)
         {
@@ -63,15 +44,12 @@ public class AccountRepository : IAccountRepository
         }
         if (appUser.Id is not null)
         {
-            LoggedInDto loggedInDto = new(
-                Id: appUser.Id,
-                Token: _tokenService.CreateToken(appUser),
-                Email: appUser.Email,
-                // Name:appUser.Name //  before add knownAs
-                KnownAs: appUser.KnownAs
-            );
+            // string token= _tokenService.CreateToken(appUser);
+
+            LoggedInDto loggedInDto = _Mappers.ConvertAppUserToLoggedinDto(appUser, _tokenService.CreateToken(appUser));
 
             return loggedInDto;
+
         }
 
         return null;
@@ -95,15 +73,13 @@ public class AccountRepository : IAccountRepository
         // check if password is correct and matched with database PasswordHash
         if (appUser.PasswordHash is not null && appUser.PasswordHash.SequenceEqual(ComputeHash))
         {
+            UpdateLastActiveInDb(appUser, cancellationToken);
+
             if (appUser.Id is not null)
             {
-                return new LoggedInDto(
-                    // Name:appUser.Name, //  before add knownAs
-                    Id: appUser.Id,
-                    Token: _tokenService.CreateToken(appUser),
-                    Email: appUser.Email,
-                    KnownAs: appUser.KnownAs
-                );
+                string token = _tokenService.CreateToken(appUser);
+                
+                return _Mappers.ConvertAppUserToLoggedinDto(appUser, token);
             }
         }
 
@@ -123,6 +99,15 @@ public class AccountRepository : IAccountRepository
         // }
 
         return null;
+    }
+
+    private async void UpdateLastActiveInDb(AppUser appUser, CancellationToken cancellationToken)
+    {
+        var newLastActive = Builders<AppUser>.Update.Set(user =>
+         user.LastActive, DateTime.UtcNow);
+
+        await _collection.UpdateOneAsync<AppUser>(user =>
+        user.Id == appUser.Id, newLastActive, null, cancellationToken);
     }
 }
 

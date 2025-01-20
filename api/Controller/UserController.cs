@@ -22,14 +22,25 @@ public class UserController : BaseApiControllers
         return userDtos;
     }
     // [Authorize]
-    [HttpGet("get-by-id/{userId}")]
-    public async Task<ActionResult<UserDto>> GetById(string userId, CancellationToken cancellationToken)
+    [HttpGet("get-by-id")]
+    public async Task<ActionResult<UserDto>> GetById( CancellationToken cancellationToken)
     {
-        UserDto? userDto = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        UserDto? userDto = await _userRepository.GetByIdAsync(ClaimPrincipalExtensions.GetUserId(User), cancellationToken);
 
         if (userDto is null)
 
             return NotFound("NO user was found");
+
+        return userDto;
+    }
+
+    [HttpGet("get-by-email/{userEmail}")]
+    public async Task<ActionResult<UserDto>> GetByEmail(string userEmail, CancellationToken cancellationToken)
+    {
+        UserDto? userDto = await _userRepository.GetByEmailAsync(userEmail, cancellationToken);
+        if (userDto is null)
+
+            return NotFound("NO user with this email address");
 
         return userDto;
     }
